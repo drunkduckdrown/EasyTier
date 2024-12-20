@@ -183,43 +183,40 @@ INIT() {
 
   # Create default blank file config
   cat >$INSTALL_PATH/config/default.conf <<EOF
-instance_name = "default"
-dhcp = true
-listeners = [
-    "tcp://0.0.0.0:11010",
-    "udp://0.0.0.0:11010",
-    "wg://0.0.0.0:11011",
-    "ws://0.0.0.0:11011/",
-    "wss://0.0.0.0:11012/",
-]
+hostname = "server"
+instance_name = "cntojp"
+dhcp = false
+ipv4 = "10.144.144.2"
+listeners = [ "tcp://0.0.0.0:11010" ]
 exit_nodes = []
+rpc_portal = "0.0.0.0:15888"
 
 [[peer]]
-uri = "tcp://public.easytier.top:11010"
+uri = "tcp://156.231.113.86:11010"
 
 [network_identity]
 network_name = "default"
-network_secret = "default"
+network_secret = ""
 
 [flags]
-default_protocol = "udp"
+default_protocol = "tcp"
 dev_name = ""
 enable_encryption = true
-enable_ipv6 = true
+enable_ipv6 = false
 mtu = 1380
-latency_first = false
+latency_first = true
 enable_exit_node = false
 no_tun = false
 use_smoltcp = false
 foreign_network_whitelist = "*"
-disable_p2p = false
+disable_p2p = true
 relay_all_peer_rpc = false
-disable_udp_hole_punching = false
+disable_udp_hole_punching = true
 
 EOF
 
   # Create systemd
-  cat >/etc/systemd/system/easytier@.service <<EOF
+  cat >/etc/systemd/system/easytier.service <<EOF
 [Unit]
 Description=EasyTier Service
 Wants=network.target
@@ -229,9 +226,7 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 WorkingDirectory=$INSTALL_PATH
-ExecStart=$INSTALL_PATH/easytier-core -c $INSTALL_PATH/config/%i.conf
-Restart=always
-RestartSec=1s
+ExecStart=$INSTALL_PATH/easytier-core -c $INSTALL_PATH/config/default.conf
 
 [Install]
 WantedBy=multi-user.target
