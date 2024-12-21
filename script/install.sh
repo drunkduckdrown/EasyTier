@@ -216,7 +216,7 @@ disable_udp_hole_punching = true
 EOF
 
   # Create systemd
-  cat >/etc/systemd/system/easytier.service <<EOF
+  cat >/etc/systemd/system/easytier@.service <<EOF
 [Unit]
 Description=EasyTier Service
 Wants=network.target
