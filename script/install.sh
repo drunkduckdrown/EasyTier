@@ -183,35 +183,15 @@ INIT() {
 
   # Create default blank file config
   cat >$INSTALL_PATH/config/default.conf <<EOF
-hostname = "server"
 instance_name = "cntojp"
-dhcp = false
-ipv4 = "10.144.144.2"
+dhcp = true
 listeners = [ "tcp://0.0.0.0:11010" ]
 exit_nodes = []
 rpc_portal = "0.0.0.0:15888"
 
-[[peer]]
-uri = "tcp://156.231.113.86:11010"
-
 [network_identity]
 network_name = "default"
 network_secret = ""
-
-[flags]
-default_protocol = "tcp"
-dev_name = ""
-enable_encryption = true
-enable_ipv6 = false
-mtu = 1380
-latency_first = true
-enable_exit_node = false
-no_tun = false
-use_smoltcp = false
-foreign_network_whitelist = "*"
-disable_p2p = true
-relay_all_peer_rpc = false
-disable_udp_hole_punching = true
 
 EOF
 
@@ -226,7 +206,7 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 WorkingDirectory=$INSTALL_PATH
-ExecStart=$INSTALL_PATH/easytier-core -c $INSTALL_PATH/config/default.conf
+ExecStart=$INSTALL_PATH/easytier-core --ipv4 10.144.144.1
 
 [Install]
 WantedBy=multi-user.target
